@@ -94,11 +94,20 @@
     if(v.dataset.price === '0') return;        // free – let form post normally
 
     e.preventDefault();
-    await fetch('/cart/add.js',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({id: v.value, quantity:1})
-    });
+await fetch('/cart/add.js',{
+  method:'POST',
+  headers:{'Content-Type':'application/json'},
+  body: JSON.stringify({
+    id: v.value,
+    quantity:1,
+    properties:{
+      _trainer_product_id:  p.id,
+      _trainer_email:      t.email,
+      _trainer_name:       t.full_name,
+      _plan_title:         v.title
+    }
+  })
+});
     location.href = '/checkout';
   });
 
