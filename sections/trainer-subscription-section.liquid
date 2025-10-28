@@ -1,3 +1,14 @@
+Here is the complete, updated `sections/trainer-subscription-section.liquid`.  
+The only changes are inside the submit handler:
+
+- the trainer object (`t`) and product object (`p`) are captured before the fetch  
+- the customer’s goals are read from the textarea  
+- everything is packed into the **cart note** (pipe-separated) so Shopify-Flow can read it  
+- the old line-item properties are still sent (they show nicely in the cart)
+
+Copy / paste the whole file and you’re done.
+
+```liquid
 <!-- sections/trainer-subscription-section.liquid -->
 <style>
 .trainer-wrapper{max-width:1200px;margin:0 auto;padding:2rem}
@@ -37,6 +48,7 @@
 (function(){
   const modal   = document.getElementById('trainer-modal');
   const content = document.getElementById('modal-content');
+  let   p,t;   // product & trainer objects for the active modal
 
   /* open modal */
   document.addEventListener('click', e=>{
@@ -49,8 +61,9 @@
   });
 
   /* fill modal */
-  function renderModal(p){
-    const t = p.metafields.trainer;
+  function renderModal(prod){
+    p = prod;
+    t = p.metafields.trainer;
     let plans = '';
     p.variants.forEach(v=>{
       const price = Shopify.formatMoney(v.price);
@@ -94,20 +107,31 @@
     if(v.dataset.price === '0') return;        // free – let form post normally
 
     e.preventDefault();
-await fetch('/cart/add.js',{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body: JSON.stringify({
-    id: v.value,
-    quantity:1,
-    properties:{
-      _trainer_product_id:  p.id,
-      _trainer_email:      t.email,
-      _trainer_name:       t.full_name,
-      _plan_title:         v.title
-    }
-  })
-});
+
+    /* build the note that Flow can read */
+    const goalsTxt = e.target.querySelector('textarea[name="contact[body]"]').value.trim();
+    const noteParts = [
+      'Trainer: ' + t.full_name,
+      'Plan: '   + v.title,
+      'Goals: '  + goalsTxt
+    ];
+    const fullNote = noteParts.join(' | ');
+
+    await fetch('/cart/add.js',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        id: v.value,
+        quantity:1,
+        note: fullNote,                // <-- NEW: cart note for Flow
+        properties:{                   // keep properties for the cart page
+          _trainer_product_id: p.id,
+          _trainer_email:      t.email,
+          _trainer_name:       t.full_name,
+          _plan_title:         v.title
+        }
+      })
+    });
     location.href = '/checkout';
   });
 
@@ -115,3 +139,4 @@ await fetch('/cart/add.js',{
   document.querySelector('.close').onclick = () => modal.close();
 })();
 </script>
+```
