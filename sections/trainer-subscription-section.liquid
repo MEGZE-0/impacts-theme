@@ -1,0 +1,108 @@
+<!-- sections/trainer-subscription-section.liquid -->
+<style>
+.trainer-wrapper{max-width:1200px;margin:0 auto;padding:2rem}
+.trainer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem}
+.trainer-card{border:1px solid #ddd;border-radius:8px;padding:1rem;text-align:center}
+.trainer-card img{width:100%;height:auto;border-radius:50%}
+.stars{color:#ffa41b}
+.btn{background:#000;color:#fff;padding:.75rem 1.5rem;border:none;border-radius:4px;cursor:pointer}
+.trainer-modal{max-width:600px;width:90%;border:none;border-radius:8px;padding:2rem}
+.close{float:right;background:none;border:none;font-size:1.5rem;cursor:pointer}
+#trainer-form label{display:block;margin:.5rem 0}
+#trainer-form input,#trainer-form textarea{width:100%;margin:.25rem 0 1rem}
+</style>
+
+<div class="trainer-wrapper">
+  <h1>Choose Your Coach</h1>
+  <div class="trainer-grid">
+    {% for product in collections.trainers.products %}
+      {% assign t = product.metafields.trainer %}
+      <div class="trainer-card" data-trainer-id="{{ product.id }}">
+        <img src="{{ t.photo | image_url: width: 300 }}" loading="lazy" alt="{{ t.full_name }}">
+        <h3>{{ t.full_name }}</h3>
+        <p class="short-desc">{{ t.short_desc }}</p>
+        <div class="stars">{% for i in (1..t.rating) %}⭐{% endfor %}</div>
+        <button class="btn view-details" data-trainer-id="{{ product.id }}">View details</button>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<dialog id="trainer-modal" class="trainer-modal">
+  <button class="close">&times;</button>
+  <div id="modal-content"><!-- JS fills this --></div>
+</dialog>
+
+<script>
+(function(){
+  const modal   = document.getElementById('trainer-modal');
+  const content = document.getElementById('modal-content');
+
+  /* open modal */
+  document.addEventListener('click', e=>{
+    if(!e.target.matches('.view-details')) return;
+    const id = e.target.dataset.trainerId;
+    fetch(`/products/${id}.js`)
+      .then(r=>r.json())
+      .then(renderModal);
+    modal.showModal();
+  });
+
+  /* fill modal */
+  function renderModal(p){
+    const t = p.metafields.trainer;
+    let plans = '';
+    p.variants.forEach(v=>{
+      const price = Shopify.formatMoney(v.price);
+      plans += `<label>
+                  <input type="radio" name="plan" value="${v.id}" data-price="${v.price}">
+                  ${v.title} – ${price}
+                </label>`;
+    });
+
+    content.innerHTML = `
+      <img src="${t.photo.url}" width="120" style="border-radius:50%">
+      <h2>${t.full_name}</h2>
+      <p>${t.long_desc}</p>
+      <p><strong>Focus:</strong> ${t.focus.replace(/,/g, ', ')}</p>
+      <p><strong>Rating:</strong> ${'⭐'.repeat(t.rating)}</p>
+
+      <form method="post" action="/contact#contact_form" id="trainer-form">
+        <input type="hidden" name="form_type" value="contact">
+        <input type="hidden" name="contact[trainer_product_id]" value="${p.id}">
+        <input type="hidden" name="contact[trainer_email]" value="${t.email}">
+        <input type="hidden" name="contact[trainer_name]" value="${t.full_name}">
+
+        <h4>Choose plan</h4>
+        ${plans}
+
+        <h4>Your details</h4>
+        <input required name="contact[name]" placeholder="Name">
+        <input required type="email" name="contact[email]" placeholder="Email">
+        <input required type="tel" name="contact[phone]" placeholder="Phone">
+        <textarea required name="contact[body]" placeholder="Training goals…"></textarea>
+
+        <button type="submit" id="submit-btn">Send request</button>
+      </form>`;
+  }
+
+  /* handle submit */
+  document.addEventListener('submit', async e=>{
+    if(!e.target.matches('#trainer-form')) return;
+    const v = e.target.querySelector('input[name="plan"]:checked');
+    if(!v) {alert('Pick a plan'); e.preventDefault(); return;}
+    if(v.dataset.price === '0') return;        // free – let form post normally
+
+    e.preventDefault();
+    await fetch('/cart/add.js',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({id: v.value, quantity:1})
+    });
+    location.href = '/checkout';
+  });
+
+  /* close modal */
+  document.querySelector('.close').onclick = () => modal.close();
+})();
+</script>
