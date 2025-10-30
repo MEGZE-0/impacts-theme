@@ -181,8 +181,8 @@
           "type": "collection",
           "settings": {
             "collection": "",
-            "subheading": "",
-            "title": "",
+            "subheading": "Exhaust systems",
+            "title": "Exhaust systems",
             "url": "",
             "heading_tag": "h2",
             "text_position": "place-self-center text-center",
@@ -195,8 +195,22 @@
           "type": "collection",
           "settings": {
             "collection": "",
-            "subheading": "",
-            "title": "",
+            "subheading": "Air intakes",
+            "title": "Air intakes",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_8BMHgj": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "Skid plates",
+            "title": "Skid plates",
             "url": "",
             "heading_tag": "h2",
             "text_position": "place-self-center text-center",
@@ -209,8 +223,22 @@
           "type": "collection",
           "settings": {
             "collection": "",
-            "subheading": "",
-            "title": "",
+            "subheading": "Body kits",
+            "title": "Body kits",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_9bHcXh": {
+          "type": "collection",
+          "settings": {
+            "collection": "",
+            "subheading": "Accessories",
+            "title": "Accessories",
             "url": "",
             "heading_tag": "h2",
             "text_position": "place-self-center text-center",
@@ -223,12 +251,14 @@
       "block_order": [
         "collection-1",
         "collection-2",
-        "collection-3"
+        "collection_8BMHgj",
+        "collection-3",
+        "collection_9bHcXh"
       ],
       "settings": {
         "full_width": true,
         "stack_collections": false,
-        "collections_per_row": 3,
+        "collections_per_row": 4,
         "show_progress_bar": false,
         "subheading": "",
         "title": "Collection list",
