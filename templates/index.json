@@ -15,6 +15,8 @@
         "image_BnmUdy": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/Whisk_b65879f6c319b1aa8704b4a3c411ab16dr.jpg",
+            "mobile_image": "shopify://shop_images/Whisk_b65879f6c319b1aa8704b4a3c411ab16dr.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
@@ -35,6 +37,8 @@
         "slide-2": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/Whisk_f52163b2adc6c219e66411d41ab4e152dr.jpg",
+            "mobile_image": "shopify://shop_images/Whisk_f52163b2adc6c219e66411d41ab4e152dr.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
