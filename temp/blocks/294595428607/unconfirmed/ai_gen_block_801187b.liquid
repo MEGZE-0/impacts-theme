@@ -1,6 +1,619 @@
+{% doc %}
+  @prompt
+    make collection shep circle  , Create a responsive homepage section called "Shop by Category".
+    
+    Layout:
+    - 4 circular category images in one horizontal row on desktop
+    - Each image should have equal size
+    - Text label centered below each circle
+    - Clean spacing between items
+    - Center the whole section
+    
+    Categories:
+    1. Desks
+    2. Chairs
+    3. Storage Units
+    4. Office Accessories
+    
+    Design style:
+    - Minimal
+    - Warm neutral background (#D9CFBF or very light beige)
+    - Soft shadow around circles
+    - Smooth hover effect:
+       - Slight zoom-in on image
+       - Subtle shadow increase
+       - Cursor pointer
+    
+    Responsive behavior:
+    - On tablet: 2 items per row
+    - On mobile: horizontal scroll slider with snap effect
+    
+    Technical requirements:
+    - Use a Shopify section (.liquid)
+    - Make images clickable and linkable to collections
+    - Allow admin to change image and label from theme editor
+    - Make circle shape using border-radius: 50%
+    - Maintain perfect aspect ratio (1:1)
+    
+    Spacing:
+    - Top & bottom padding: 60px desktop / 40px mobile
+    - Gap between items: 40px
+    
+    Hover transition:
+    - transition: all 0.3s ease;
+    - transform: scale(1.05);
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-shop-category-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    background-color: {{ block.settings.background_color }};
+    padding: {{ block.settings.padding_desktop }}px 20px;
+  }
+
+  .ai-shop-category__container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+  }
+
+  .ai-shop-category__heading-{{ ai_gen_id }} {
+    text-align: center;
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.heading_spacing }}px 0;
+    font-weight: {{ block.settings.heading_weight }};
+  }
+
+  .ai-shop-category__grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: {{ block.settings.gap_desktop }}px;
+    justify-items: center;
+  }
+
+  .ai-shop-category__item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    width: 100%;
+    max-width: {{ block.settings.circle_size }}px;
+  }
+
+  .ai-shop-category__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: {{ block.settings.placeholder_color }};
+    box-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y }}px {{ block.settings.shadow_blur }}px rgba(0, 0, 0, {{ block.settings.shadow_opacity }});
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .ai-shop-category__item-{{ ai_gen_id }}:hover .ai-shop-category__image-wrapper-{{ ai_gen_id }} {
+    transform: scale({{ block.settings.hover_scale }});
+    box-shadow: {{ block.settings.shadow_x }}px {{ block.settings.shadow_y | plus: 4 }}px {{ block.settings.shadow_blur | plus: 10 }}px rgba(0, 0, 0, {{ block.settings.shadow_opacity | plus: 0.1 }});
+  }
+
+  .ai-shop-category__image-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-shop-category__placeholder-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-shop-category__placeholder-{{ ai_gen_id }} svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.3;
+  }
+
+  .ai-shop-category__label-{{ ai_gen_id }} {
+    margin-top: {{ block.settings.label_spacing }}px;
+    font-size: {{ block.settings.label_size }}px;
+    color: {{ block.settings.label_color }};
+    text-align: center;
+    font-weight: {{ block.settings.label_weight }};
+    transition: color 0.3s ease;
+  }
+
+  .ai-shop-category__item-{{ ai_gen_id }}:hover .ai-shop-category__label-{{ ai_gen_id }} {
+    color: {{ block.settings.label_hover_color }};
+  }
+
+  @media screen and (max-width: 989px) and (min-width: 750px) {
+    .ai-shop-category__grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+      gap: {{ block.settings.gap_tablet }}px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-shop-category-{{ ai_gen_id }} {
+      padding: {{ block.settings.padding_mobile }}px 0;
+    }
+
+    .ai-shop-category__heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+      padding: 0 20px;
+    }
+
+    .ai-shop-category__grid-{{ ai_gen_id }} {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: {{ block.settings.gap_mobile }}px;
+      padding: 0 20px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .ai-shop-category__grid-{{ ai_gen_id }}::-webkit-scrollbar {
+      display: none;
+    }
+
+    .ai-shop-category__item-{{ ai_gen_id }} {
+      flex: 0 0 {{ block.settings.mobile_item_width }}%;
+      scroll-snap-align: start;
+      max-width: 200px;
+    }
+
+    .ai-shop-category__label-{{ ai_gen_id }} {
+      font-size: {{ block.settings.label_size | times: 0.9 }}px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ai-shop-category__image-wrapper-{{ ai_gen_id }},
+    .ai-shop-category__label-{{ ai_gen_id }} {
+      transition: none;
+    }
+
+    .ai-shop-category__item-{{ ai_gen_id }}:hover .ai-shop-category__image-wrapper-{{ ai_gen_id }} {
+      transform: none;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-shop-category-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-shop-category__container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-shop-category__heading-{{ ai_gen_id }}">
+        {{ block.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <div class="ai-shop-category__grid-{{ ai_gen_id }}">
+      {% for i in (1..4) %}
+        {% liquid
+          assign image_key = 'category_' | append: i | append: '_image'
+          assign label_key = 'category_' | append: i | append: '_label'
+          assign link_key = 'category_' | append: i | append: '_link'
+          
+          assign category_image = block.settings[image_key]
+          assign category_label = block.settings[label_key]
+          assign category_link = block.settings[link_key]
+        %}
+
+        <a 
+          href="{% if category_link != blank %}{{ category_link }}{% else %}#{% endif %}" 
+          class="ai-shop-category__item-{{ ai_gen_id }}"
+        >
+          <div class="ai-shop-category__image-wrapper-{{ ai_gen_id }}">
+            {% if category_image %}
+              <img
+                src="{{ category_image | image_url: width: 600 }}"
+                alt="{{ category_image.alt | escape }}"
+                class="ai-shop-category__image-{{ ai_gen_id }}"
+                loading="lazy"
+                width="600"
+                height="600"
+              >
+            {% else %}
+              <div class="ai-shop-category__placeholder-{{ ai_gen_id }}">
+                {{ 'collection-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+          </div>
+
+          {% if category_label != blank %}
+            <span class="ai-shop-category__label-{{ ai_gen_id }}">
+              {{ category_label }}
+            </span>
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Shop by category",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop by Category"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "label": "Space below heading",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Category 1"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "category_1_label",
+      "label": "Label",
+      "default": "Desks"
+    },
+    {
+      "type": "url",
+      "id": "category_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Category 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_2_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "category_2_label",
+      "label": "Label",
+      "default": "Chairs"
+    },
+    {
+      "type": "url",
+      "id": "category_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Category 3"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "category_3_label",
+      "label": "Label",
+      "default": "Storage Units"
+    },
+    {
+      "type": "url",
+      "id": "category_3_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Category 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "category_4_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "category_4_label",
+      "label": "Label",
+      "default": "Office Accessories"
+    },
+    {
+      "type": "url",
+      "id": "category_4_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Maximum width",
+      "min": 1000,
+      "max": 1600,
+      "step": 100,
+      "unit": "px",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "circle_size",
+      "label": "Circle size",
+      "min": 150,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Gap between items (desktop)",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "gap_tablet",
+      "label": "Gap between items (tablet)",
+      "min": 20,
+      "max": 60,
+      "step": 5,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Gap between items (mobile)",
+      "min": 15,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_item_width",
+      "label": "Mobile item width",
+      "min": 50,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_desktop",
+      "label": "Top & bottom padding (desktop)",
+      "min": 20,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_mobile",
+      "label": "Top & bottom padding (mobile)",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "label_spacing",
+      "label": "Space above label",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Label style"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "label": "Size",
+      "min": 12,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "label_weight",
+      "label": "Weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "label_hover_color",
+      "label": "Hover color",
+      "default": "#b78560"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#D9CFBF"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Placeholder",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "header",
+      "content": "Shadow"
+    },
+    {
+      "type": "range",
+      "id": "shadow_x",
+      "label": "Horizontal offset",
+      "min": -10,
+      "max": 10,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "shadow_y",
+      "label": "Vertical offset",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "shadow_blur",
+      "label": "Blur",
+      "min": 0,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "shadow_opacity",
+      "label": "Opacity",
+      "min": 0,
+      "max": 0.5,
+      "step": 0.1,
+      "default": 0.2
+    },
+    {
+      "type": "header",
+      "content": "Hover effect"
+    },
+    {
+      "type": "range",
+      "id": "hover_scale",
+      "label": "Scale",
+      "min": 1,
+      "max": 1.2,
+      "step": 0.1,
+      "default": 1.1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by category"
+    }
+  ]
+}
 {% endschema %}
