@@ -1,3 +1,11 @@
+{%- comment -%}
+  Custom Collection Slider (Dawn-compatible)
+  - Circular collection cards
+  - Prev/Next arrows (NO dots)
+  - Works on desktop when blocks > columns_desktop
+  - Works on mobile when swipe_on_mobile enabled AND blocks > columns_mobile
+{%- endcomment -%}
+
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -11,66 +19,136 @@
     }
   }
 {%- endstyle -%}
-<style>
-  .custom-collection-slider {
-    margin: 0 auto;
-  }
-  .custom-collection-slider .icon-wrap {
-    display: none;
-  }
-  .custom-collection-slider .card__heading {
-    text-align: center;
-    color: #000;
-  }
-  .custom-collection-slider ul {
-    justify-content: center;
-  }
-  .custom-collection-slider .card__media,
-  .custom-collection-slider .card__inner {
-    border-radius: 999px !important;
-  }
-  .custom-collection-slider .card:hover .media.media--hover-effect>img:first-child:only-child {
-    transform: scale(1.1);
-    transition: .3s ease-in-out;
-  }
-  .custom-collection-slider .card__content .card__heading {
-    font-size: 14px;
-  }
-  .custom-collection-slider .grid__item {
-    width: calc(7.66% - var(--grid-desktop-horizontal-spacing) * 5 / 6);
-  }
-  .custom-collection-slider .card__media {
-    border: 2px solid #dadada;
-    padding: 2px;
-  }
-  .custom-collection-slider .card:hover .card__media  {
-    border: 3px solid #000;
-    transition: .3s ease-in-out;
-  }
-  @media only screen and (max-width: 800px) {
-    .custom-collection-slider ul {
-      display: -webkit-inline-box;
-    }
-    .custom-collection-slider .card__content .card__heading {
-      font-size: 13px;
-    }
-    .custom-collection-slider .grid__item {
-      width: calc(40% - var(--grid-mobile-horizontal-spacing) - 3rem) !important;
-    }
-    
-  }
-</style>
 
 {%- liquid
   assign columns_mobile_int = section.settings.columns_mobile | plus: 0
+
   assign show_mobile_slider = false
   if section.settings.swipe_on_mobile and section.blocks.size > columns_mobile_int
     assign show_mobile_slider = true
   endif
+
+  assign show_desktop_slider = false
+  if section.blocks.size > section.settings.columns_desktop
+    assign show_desktop_slider = true
+  endif
+
+  assign show_slider = false
+  if show_mobile_slider or show_desktop_slider
+    assign show_slider = true
+  endif
 -%}
+
+<style>
+  .custom-collection-slider {
+    margin: 0 auto;
+  }
+
+  /* Hide Dawn's "icon-wrap" if present */
+  .custom-collection-slider .icon-wrap {
+    display: none;
+  }
+
+  .custom-collection-slider .card__heading {
+    text-align: center;
+    color: #000;
+  }
+
+  /* Make the image fully round */
+  .custom-collection-slider .card__media,
+  .custom-collection-slider .card__inner {
+    border-radius: 999px !important;
+    overflow: hidden;
+  }
+
+  /* Circle border */
+  .custom-collection-slider .card__media {
+    border: 2px solid #dadada;
+    padding: 2px;
+    transition: border .3s ease-in-out;
+  }
+
+  .custom-collection-slider .card:hover .card__media {
+    border: 3px solid #000;
+  }
+
+  /* Hover zoom */
+  .custom-collection-slider .card:hover .media.media--hover-effect > img:first-child:only-child {
+    transform: scale(1.08);
+    transition: transform .3s ease-in-out;
+  }
+
+  .custom-collection-slider .card__content .card__heading {
+    font-size: 14px;
+  }
+
+  /* IMPORTANT: remove any forced width that breaks slider math */
+  .custom-collection-slider .grid__item {
+    width: auto !important;
+    max-width: none !important;
+  }
+
+  /* Arrow placement */
+  .custom-collection-slider slider-component {
+    position: relative;
+    display: block;
+  }
+
+  .custom-collection-slider .custom-arrows {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 6;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none; /* keep drag/swipe working */
+  }
+
+  .custom-collection-slider .custom-arrows .slider-button {
+    pointer-events: auto; /* allow clicking */
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.12);
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.12);
+    display: grid;
+    place-items: center;
+  }
+
+  /* Push arrows slightly outside the carousel */
+  .custom-collection-slider .custom-arrows .slider-button--prev {
+    margin-left: -24px;
+    transform: rotate(90deg); /* Dawn caret points down by default */
+  }
+  .custom-collection-slider .custom-arrows .slider-button--next {
+    margin-right: -24px;
+    transform: rotate(-90deg);
+  }
+
+  .custom-collection-slider .slider-button[disabled] {
+    opacity: .35;
+    cursor: not-allowed;
+  }
+
+  /* Mobile tweaks */
+  @media only screen and (max-width: 800px) {
+    .custom-collection-slider .card__content .card__heading {
+      font-size: 13px;
+    }
+
+    /* keep your row scrolling feel on small widths */
+    .custom-collection-slider ul.slider {
+      display: flex;
+    }
+  }
+</style>
 
 <div class="custom-collection-slider color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-list-wrapper page-width isolate{% if show_mobile_slider %} page-width-desktop{% endif %}{% if section.settings.title == blank %} no-heading{% endif %}{% if section.settings.show_view_all == false or section.blocks.size > collections.size %} no-mobile-link{% endif %} section-{{ section.id }}-padding">
+
     {%- unless section.settings.title == blank -%}
       <div class="title-wrapper-with-link{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% else %} title-wrapper--self-padded-mobile{% endif %} title-wrapper--no-top-margin">
         <h2
@@ -95,7 +173,12 @@
 
     <slider-component class="slider-mobile-gutter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <ul
-        class="collection-list contains-card contains-card--collection{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down{% if section.settings.swipe_on_mobile %} slider slider--tablet grid--peek{% endif %} collection-list--{{ section.blocks.size }}-items"
+        class="collection-list contains-card contains-card--collection{% if settings.card_style == 'standard' %} contains-card--standard{% endif %}
+        grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down
+        {% if show_slider %} slider{% endif %}
+        {% if show_desktop_slider %} slider--desktop{% endif %}
+        {% if show_mobile_slider %} slider--tablet grid--peek{% endif %}
+        collection-list--{{ section.blocks.size }}-items"
         id="Slider-{{ section.id }}"
         role="list"
       >
@@ -105,10 +188,11 @@
             assign columns = 3
           endif
         -%}
+
         {%- for block in section.blocks -%}
           <li
             id="Slide-{{ section.id }}-{{ forloop.index }}"
-            class="collection-list__item grid__item{% if show_mobile_slider %} slider__slide{% endif %}{% if block.settings.collection.featured_image == nil %} collection-list__item--no-media{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            class="collection-list__item grid__item{% if show_slider %} slider__slide{% endif %}{% if block.settings.collection.featured_image == nil %} collection-list__item--no-media{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
             {{ block.shopify_attributes }}
             {% if settings.animations_reveal_on_scroll %}
               data-cascade
@@ -117,6 +201,7 @@
           >
             {%- assign placeholder_image_index = forloop.index0 | modulo: 4 | plus: 1 -%}
             {%- assign placeholder_image = 'collection-apparel-' | append: placeholder_image_index -%}
+
             {% render 'card-collection',
               card_collection: block.settings.collection,
               media_aspect_ratio: section.settings.image_ratio,
@@ -126,6 +211,30 @@
           </li>
         {%- endfor -%}
       </ul>
+
+      {%- if show_slider -%}
+        <div class="slider-buttons no-js-hidden custom-arrows">
+          <button
+            type="button"
+            class="slider-button slider-button--prev"
+            name="previous"
+            aria-label="Previous"
+            aria-controls="Slider-{{ section.id }}"
+          >
+            {% render 'icon-caret' %}
+          </button>
+
+          <button
+            type="button"
+            class="slider-button slider-button--next"
+            name="next"
+            aria-label="Next"
+            aria-controls="Slider-{{ section.id }}"
+          >
+            {% render 'icon-caret' %}
+          </button>
+        </div>
+      {%- endif -%}
     </slider-component>
 
     {%- if section.settings.show_view_all and section.blocks.size < collections.size -%}
@@ -145,6 +254,7 @@
         </a>
       </div>
     {%- endif -%}
+
   </div>
 </div>
 
@@ -168,26 +278,11 @@
       "type": "select",
       "id": "heading_size",
       "options": [
-        {
-          "value": "h2",
-          "label": "Small"
-        },
-        {
-          "value": "h1",
-          "label": "Medium"
-        },
-        {
-          "value": "h0",
-          "label": "Large"
-        },
-        {
-          "value": "hxl",
-          "label": "Extra large"
-        },
-        {
-          "value": "hxxl",
-          "label": "Extra extra large"
-        }
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" },
+        { "value": "hxxl", "label": "Extra extra large" }
       ],
       "default": "h1",
       "label": "Heading size"
@@ -196,22 +291,13 @@
       "type": "select",
       "id": "image_ratio",
       "options": [
-        {
-          "value": "adapt",
-          "label": "Adapt"
-        },
-        {
-          "value": "portrait",
-          "label": "Portrait"
-        },
-        {
-          "value": "square",
-          "label": "Square"
-        }
+        { "value": "adapt", "label": "Adapt" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
       ],
       "default": "square",
       "label": "Image ratio",
-      "info": "Add images by editing your collections. Learn more"
+      "info": "Add images by editing your collections."
     },
     {
       "type": "range",
@@ -219,21 +305,20 @@
       "min": 1,
       "max": 6,
       "step": 1,
-      "default": 3,
+      "default": 4,
       "label": "Number of columns on desktop"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "To edit all your theme's colors, go to your color theme settings.",
-      "info": "To change the card color scheme, update your theme settings.",
+      "label": "Color scheme",
       "default": "scheme-1"
     },
     {
       "type": "checkbox",
       "id": "show_view_all",
       "default": false,
-      "label": "Enable View all button if list includes more collections than shown"
+      "label": "Enable View all button"
     },
     {
       "type": "header",
@@ -243,14 +328,8 @@
       "type": "select",
       "id": "columns_mobile",
       "options": [
-        {
-          "value": "1",
-          "label": "1 Column"
-        },
-        {
-          "value": "2",
-          "label": "2 Column"
-        }
+        { "value": "1", "label": "1 Column" },
+        { "value": "2", "label": "2 Column" }
       ],
       "default": "1",
       "label": "Number of columns on mobile"
@@ -258,7 +337,7 @@
     {
       "type": "checkbox",
       "id": "swipe_on_mobile",
-      "default": false,
+      "default": true,
       "label": "Enable swipe on mobile"
     },
     {
@@ -303,15 +382,10 @@
     {
       "name": "Collection slider",
       "blocks": [
-        {
-          "type": "featured_collection"
-        },
-        {
-          "type": "featured_collection"
-        },
-        {
-          "type": "featured_collection"
-        }
+        { "type": "featured_collection" },
+        { "type": "featured_collection" },
+        { "type": "featured_collection" },
+        { "type": "featured_collection" }
       ]
     }
   ]
