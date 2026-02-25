@@ -1,6 +1,389 @@
+{% doc %}
+  @prompt
+    make collection shep circle  
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-collection-circle-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.padding }}px;
+  }
+
+  .ai-collection-circle__container-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: {{ block.settings.spacing }}px;
+    text-align: center;
+  }
+
+  .ai-collection-circle__image-wrapper-{{ ai_gen_id }} {
+    position: relative;
+    width: {{ block.settings.circle_size }}px;
+    height: {{ block.settings.circle_size }}px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: {{ block.settings.placeholder_color }};
+    transition: transform 0.3s ease;
+  }
+
+  .ai-collection-circle__image-wrapper-{{ ai_gen_id }}:hover {
+    transform: scale({{ block.settings.hover_scale }});
+  }
+
+  .ai-collection-circle__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-collection-circle__placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: {{ block.settings.placeholder_color }};
+  }
+
+  .ai-collection-circle__placeholder-{{ ai_gen_id }} svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+
+  .ai-collection-circle__link-{{ ai_gen_id }} {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: {{ block.settings.spacing }}px;
+  }
+
+  .ai-collection-circle__title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.title_size }}px;
+    font-weight: {{ block.settings.title_weight }};
+    color: {{ block.settings.title_color }};
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+
+  .ai-collection-circle__link-{{ ai_gen_id }}:hover .ai-collection-circle__title-{{ ai_gen_id }} {
+    color: {{ block.settings.title_hover_color }};
+  }
+
+  .ai-collection-circle__description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.description_color }};
+    margin: 0;
+    max-width: {{ block.settings.description_max_width }}px;
+  }
+
+  .ai-collection-circle__count-{{ ai_gen_id }} {
+    font-size: {{ block.settings.count_size }}px;
+    color: {{ block.settings.count_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-collection-circle__image-wrapper-{{ ai_gen_id }} {
+      width: {{ block.settings.circle_size | times: 0.7 }}px;
+      height: {{ block.settings.circle_size | times: 0.7 }}px;
+    }
+
+    .ai-collection-circle__title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.title_size | times: 0.8 }}px;
+    }
+
+    .ai-collection-circle__description-{{ ai_gen_id }} {
+      font-size: {{ block.settings.description_size | times: 0.9 }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-collection-circle-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-collection-circle__container-{{ ai_gen_id }}">
+    {% if block.settings.collection != blank %}
+      <a href="{{ block.settings.collection.url }}" class="ai-collection-circle__link-{{ ai_gen_id }}">
+        <div class="ai-collection-circle__image-wrapper-{{ ai_gen_id }}">
+          {% if block.settings.collection.image %}
+            <img
+              src="{{ block.settings.collection.image | image_url: width: 600 }}"
+              alt="{{ block.settings.collection.image.alt | escape }}"
+              class="ai-collection-circle__image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="600"
+              height="600"
+            >
+          {% elsif block.settings.collection.products.first.featured_image %}
+            <img
+              src="{{ block.settings.collection.products.first.featured_image | image_url: width: 600 }}"
+              alt="{{ block.settings.collection.products.first.featured_image.alt | escape }}"
+              class="ai-collection-circle__image-{{ ai_gen_id }}"
+              loading="lazy"
+              width="600"
+              height="600"
+            >
+          {% else %}
+            <div class="ai-collection-circle__placeholder-{{ ai_gen_id }}">
+              {{ 'collection-1' | placeholder_svg_tag }}
+            </div>
+          {% endif %}
+        </div>
+
+        {% if block.settings.show_title %}
+          <h3 class="ai-collection-circle__title-{{ ai_gen_id }}">
+            {{ block.settings.collection.title }}
+          </h3>
+        {% endif %}
+
+        {% if block.settings.show_description and block.settings.collection.description != blank %}
+          <p class="ai-collection-circle__description-{{ ai_gen_id }}">
+            {{ block.settings.collection.description | strip_html | truncate: 100 }}
+          </p>
+        {% endif %}
+
+        {% if block.settings.show_product_count %}
+          <span class="ai-collection-circle__count-{{ ai_gen_id }}">
+            {{ block.settings.collection.products_count }}
+            {% if block.settings.collection.products_count == 1 %}
+              product
+            {% else %}
+              products
+            {% endif %}
+          </span>
+        {% endif %}
+      </a>
+    {% else %}
+      <div class="ai-collection-circle__link-{{ ai_gen_id }}">
+        <div class="ai-collection-circle__image-wrapper-{{ ai_gen_id }}">
+          <div class="ai-collection-circle__placeholder-{{ ai_gen_id }}">
+            {{ 'collection-1' | placeholder_svg_tag }}
+          </div>
+        </div>
+
+        {% if block.settings.show_title %}
+          <h3 class="ai-collection-circle__title-{{ ai_gen_id }}">
+            Collection name
+          </h3>
+        {% endif %}
+
+        {% if block.settings.show_description %}
+          <p class="ai-collection-circle__description-{{ ai_gen_id }}">
+            Select a collection to display
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Collection circle",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "circle_size",
+      "label": "Circle size",
+      "min": 100,
+      "max": 400,
+      "step": 20,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "spacing",
+      "label": "Spacing between elements",
+      "min": 5,
+      "max": 40,
+      "step": 5,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Display options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Hover effect"
+    },
+    {
+      "type": "range",
+      "id": "hover_scale",
+      "label": "Hover scale",
+      "min": 1,
+      "max": 1.5,
+      "step": 0.1,
+      "default": 1.1
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Size",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "title_weight",
+      "label": "Weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "title_hover_color",
+      "label": "Hover color",
+      "default": "#b78560"
+    },
+    {
+      "type": "header",
+      "content": "Description style"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "label": "Size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "description_max_width",
+      "label": "Max width",
+      "min": 150,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Product count style"
+    },
+    {
+      "type": "range",
+      "id": "count_size",
+      "label": "Size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "count_color",
+      "label": "Color",
+      "default": "#999999"
+    },
+    {
+      "type": "header",
+      "content": "Placeholder"
+    },
+    {
+      "type": "color",
+      "id": "placeholder_color",
+      "label": "Background color",
+      "default": "#f4f4f4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection circle"
+    }
+  ]
+}
 {% endschema %}
