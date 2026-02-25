@@ -22,21 +22,21 @@
         "featured_collection_BwLWX4": {
           "type": "featured_collection",
           "settings": {
-            "collection": "",
+            "collection": "ramadan",
             "custom_label": ""
           }
         },
         "featured_collection_LGe3qY": {
           "type": "featured_collection",
           "settings": {
-            "collection": "",
+            "collection": "homeware",
             "custom_label": ""
           }
         },
         "featured_collection_8KMDLD": {
           "type": "featured_collection",
           "settings": {
-            "collection": "",
+            "collection": "desk-organizers",
             "custom_label": ""
           }
         }
