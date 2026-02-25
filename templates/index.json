@@ -9,56 +9,6 @@
  */
 {
   "sections": {
-    "collection_lis_hcancU": {
-      "type": "collection-lis",
-      "blocks": {
-        "featured_collection_cUWeEH": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "frontpage",
-            "custom_label": ""
-          }
-        },
-        "featured_collection_BwLWX4": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "ramadan",
-            "custom_label": ""
-          }
-        },
-        "featured_collection_LGe3qY": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "homeware",
-            "custom_label": ""
-          }
-        },
-        "featured_collection_8KMDLD": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "desk-organizers",
-            "custom_label": ""
-          }
-        }
-      },
-      "block_order": [
-        "featured_collection_cUWeEH",
-        "featured_collection_BwLWX4",
-        "featured_collection_LGe3qY",
-        "featured_collection_8KMDLD"
-      ],
-      "name": "Collection slider",
-      "settings": {
-        "title": "Collections",
-        "heading_size": "h1",
-        "columns_desktop": 4,
-        "color_scheme": "",
-        "columns_mobile": "1",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "slideshow": {
       "type": "slideshow",
       "blocks": {
@@ -117,6 +67,61 @@
         "cycle_speed": 6,
         "background": "#f2f2f2",
         "background_gradient": "linear-gradient(60deg, rgba(60, 65, 68, 1), rgba(23, 29, 33, 1) 98%)"
+      }
+    },
+    "collection_lis_hcancU": {
+      "type": "collection-lis",
+      "blocks": {
+        "featured_collection_zCXWkT": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "shop-all",
+            "custom_label": ""
+          }
+        },
+        "featured_collection_cUWeEH": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "frontpage",
+            "custom_label": ""
+          }
+        },
+        "featured_collection_BwLWX4": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ramadan",
+            "custom_label": ""
+          }
+        },
+        "featured_collection_LGe3qY": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "homeware",
+            "custom_label": ""
+          }
+        },
+        "featured_collection_8KMDLD": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "desk-organizers",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_zCXWkT",
+        "featured_collection_cUWeEH",
+        "featured_collection_BwLWX4",
+        "featured_collection_LGe3qY",
+        "featured_collection_8KMDLD"
+      ],
+      "name": "Collection slider",
+      "settings": {
+        "title": "Collections",
+        "heading_size": "h1",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "collection-list": {
@@ -200,6 +205,7 @@
         "collection-3",
         "collection_9bHcXh"
       ],
+      "disabled": true,
       "settings": {
         "full_width": true,
         "stack_collections": false,
@@ -855,8 +861,8 @@
     }
   },
   "order": [
-    "collection_lis_hcancU",
     "slideshow",
+    "collection_lis_hcancU",
     "collection-list",
     "featured-collection",
     "impact-text",
