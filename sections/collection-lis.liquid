@@ -1,8 +1,9 @@
 {%- comment -%}
   Responsive Collection Carousel (Theme-agnostic)
-  - Flex row (items side-by-side)
-  - Arrows + swipe
-  - No dots
+  - Items always side-by-side (flex track)
+  - Prev/Next arrows ONLY (no dots)
+  - Arrows fixed (reset theme styles)
+  - Swipe/drag via native scroll + buttons
   - Blocks: add/remove/reorder collections freely
 {%- endcomment -%}
 
@@ -20,20 +21,11 @@
 {%- endstyle -%}
 
 <style>
-  .cc-{{ section.id }} {
-    background: transparent;
-  }
+  .cc-{{ section.id }} .heading { margin: 0 0 22px; }
 
-  .cc-{{ section.id }} .heading {
-    margin: 0 0 22px;
-  }
+  .cc-{{ section.id }} .carousel { position: relative; }
 
-  /* Wrapper */
-  .cc-{{ section.id }} .carousel {
-    position: relative;
-  }
-
-  /* Scroll track (ALWAYS side-by-side) */
+  /* TRACK: always side-by-side */
   .cc-{{ section.id }} .track {
     display: flex;
     gap: 32px;
@@ -48,29 +40,27 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* Hide scrollbar (optional) */
+  /* hide scrollbar */
   .cc-{{ section.id }} .track::-webkit-scrollbar { height: 0; }
   .cc-{{ section.id }} .track { scrollbar-width: none; }
 
-  /* Slide widths per breakpoint */
+  /* slide widths per breakpoint */
   .cc-{{ section.id }} .slide {
-    flex: 0 0 calc((100% - (32px * 3)) / 4); /* 4 items desktop */
+    flex: 0 0 calc((100% - (32px * 3)) / 4); /* 4 visible desktop */
     scroll-snap-align: start;
   }
-
   @media (max-width: 1023px) {
     .cc-{{ section.id }} .slide {
-      flex: 0 0 calc((100% - (32px * 2)) / 3); /* 3 items tablet */
+      flex: 0 0 calc((100% - (32px * 2)) / 3); /* 3 visible tablet */
     }
   }
-
   @media (max-width: 767px) {
     .cc-{{ section.id }} .slide {
-      flex: 0 0 55.5%; /* ~1.8 item visible (peek) */
+      flex: 0 0 55.5%; /* ~1.8 visible mobile (peek) */
     }
   }
 
-  /* Card */
+  /* card */
   .cc-{{ section.id }} .card {
     display: grid;
     justify-items: center;
@@ -78,8 +68,9 @@
     color: inherit;
   }
 
+  /* circle size: responsive with clamp so 4 fit nicely */
   .cc-{{ section.id }} .circle {
-    width: 220px;
+    width: clamp(140px, 18vw, 220px);
     aspect-ratio: 1 / 1;
     border-radius: 999px;
     overflow: hidden;
@@ -111,12 +102,11 @@
     text-align: center;
     color: #000;
   }
+  @media (max-width: 767px) {
+    .cc-{{ section.id }} .label { font-size: 13px; }
+  }
 
-  /* Responsive circle size */
-  @media (max-width: 1023px) { .cc-{{ section.id }} .circle { width: 180px; } }
-  @media (max-width: 767px)  { .cc-{{ section.id }} .circle { width: 140px; } .cc-{{ section.id }} .label { font-size: 13px; } }
-
-  /* Arrows (always visible desktop/tablet) */
+  /* ARROWS WRAP */
   .cc-{{ section.id }} .arrows {
     position: absolute;
     top: 50%;
@@ -125,30 +115,50 @@
     display: flex;
     justify-content: space-between;
     pointer-events: none;
-    z-index: 5;
+    z-index: 10;
   }
 
-  .cc-{{ section.id }} .btn {
+  /* FIX: reset theme styles so arrows don't look broken */
+  .cc-{{ section.id }} .arrows .btn{
+    all: unset;
     pointer-events: auto;
     width: 44px;
     height: 44px;
     border-radius: 999px;
     background: #fff;
-    border: 1px solid rgba(0,0,0,.12);
+    border: 1px solid rgba(0,0,0,.14);
     box-shadow: 0 6px 18px rgba(0,0,0,.12);
     display: grid;
     place-items: center;
     cursor: pointer;
   }
 
-  .cc-{{ section.id }} .btn.prev { margin-left: -24px; }
-  .cc-{{ section.id }} .btn.next { margin-right: -24px; }
+  .cc-{{ section.id }} .arrows .btn.prev { margin-left: -24px; }
+  .cc-{{ section.id }} .arrows .btn.next { margin-right: -24px; }
 
-  .cc-{{ section.id }} .btn[disabled] { opacity: .35; cursor: not-allowed; }
+  .cc-{{ section.id }} .arrows .btn:hover{
+    box-shadow: 0 10px 26px rgba(0,0,0,.16);
+  }
+  .cc-{{ section.id }} .arrows .btn:focus{
+    outline: 2px solid rgba(0,0,0,.25);
+    outline-offset: 2px;
+  }
+  .cc-{{ section.id }} .arrows .btn[disabled]{
+    opacity: .35;
+    cursor: not-allowed;
+  }
 
-  .cc-{{ section.id }} .chev { width: 18px; height: 18px; display:block; }
+  .cc-{{ section.id }} .arrows .btn svg{
+    width: 18px !important;
+    height: 18px !important;
+    display: block !important;
+  }
+  .cc-{{ section.id }} .arrows .btn svg path{
+    stroke: #000 !important;
+    stroke-width: 2.5 !important;
+  }
 
-  /* Optional: hide arrows on mobile (set true/false by CSS) */
+  /* Optional: hide arrows on mobile (remove if you want them visible on mobile too) */
   @media (max-width: 767px) {
     .cc-{{ section.id }} .arrows { display: none; }
   }
@@ -167,6 +177,7 @@
           {%- if c != blank -%}
             {%- assign img = block.settings.custom_image | default: c.featured_image -%}
             {%- assign label = block.settings.custom_label | default: c.title -%}
+
             <li class="slide" {{ block.shopify_attributes }}>
               <a class="card" href="{{ c.url }}">
                 <div class="circle">
@@ -195,15 +206,16 @@
         {%- endfor -%}
       </ul>
 
-      <div class="arrows">
+      <div class="arrows" aria-hidden="false">
         <button class="btn prev" type="button" aria-controls="Track-{{ section.id }}" aria-label="Previous">
-          <svg class="chev" viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
+
         <button class="btn next" type="button" aria-controls="Track-{{ section.id }}" aria-label="Next">
-          <svg class="chev" viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
       </div>
@@ -220,31 +232,36 @@
     const prev = root.querySelector('.btn.prev');
     const next = root.querySelector('.btn.next');
 
+    function getGap() {
+      const styles = getComputedStyle(track);
+      const g = parseFloat(styles.gap || styles.columnGap || 0);
+      return isNaN(g) ? 0 : g;
+    }
+
     function getStep() {
       const first = track.querySelector('.slide');
       if (!first) return 0;
-      const slideStyles = getComputedStyle(track);
-      const gap = parseFloat(slideStyles.columnGap || slideStyles.gap || 0) || 0;
-      return first.getBoundingClientRect().width + gap;
+      return first.getBoundingClientRect().width + getGap();
     }
 
     function updateButtons() {
-      const maxScroll = track.scrollWidth - track.clientWidth - 1;
+      const maxScroll = track.scrollWidth - track.clientWidth;
       prev.disabled = track.scrollLeft <= 1;
-      next.disabled = track.scrollLeft >= maxScroll;
+      next.disabled = track.scrollLeft >= (maxScroll - 1);
     }
 
     function scrollByOne(dir) {
       const step = getStep();
+      if (!step) return;
       track.scrollBy({ left: dir * step, behavior: 'smooth' });
     }
 
     prev.addEventListener('click', () => scrollByOne(-1));
     next.addEventListener('click', () => scrollByOne(1));
+
     track.addEventListener('scroll', updateButtons, { passive: true });
     window.addEventListener('resize', updateButtons);
 
-    // init
     updateButtons();
   })();
 </script>
