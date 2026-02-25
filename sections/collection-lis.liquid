@@ -1,10 +1,9 @@
 {%- comment -%}
-  Standalone Collection Carousel (no card-collection snippet required)
-  - Circular images + label
-  - Prev/Next arrows (no dots)
+  Responsive Collection Carousel (Theme-agnostic)
+  - Flex row (items side-by-side)
+  - Arrows + swipe
+  - No dots
   - Blocks: add/remove/reorder collections freely
-  - Works on desktop if blocks > columns_desktop
-  - Works on mobile if swipe_on_mobile enabled and blocks > columns_mobile
 {%- endcomment -%}
 
 {%- style -%}
@@ -12,7 +11,7 @@
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
-  @media screen and (min-width: 750px) {
+  @media (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -20,54 +19,68 @@
   }
 {%- endstyle -%}
 
-{%- liquid
-  assign columns_mobile_int = section.settings.columns_mobile | plus: 0
-
-  assign show_mobile_slider = false
-  if section.settings.swipe_on_mobile and section.blocks.size > columns_mobile_int
-    assign show_mobile_slider = true
-  endif
-
-  assign show_desktop_slider = false
-  if section.blocks.size > section.settings.columns_desktop
-    assign show_desktop_slider = true
-  endif
-
-  assign show_slider = false
-  if show_mobile_slider or show_desktop_slider
-    assign show_slider = true
-  endif
--%}
-
 <style>
-  .custom-collection-slider { margin: 0 auto; }
-  .custom-collection-slider .section-heading { margin: 0 0 24px; }
-
-  /* Slider wrapper */
-  .custom-collection-slider slider-component { position: relative; display:block; }
-
-  /* Track */
-  .custom-collection-slider .collection-track {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 32px;
+  .cc-{{ section.id }} {
+    background: transparent;
   }
 
-  /* Ensure slider math not broken */
-  .custom-collection-slider .collection-item { width: auto !important; max-width: none !important; }
+  .cc-{{ section.id }} .heading {
+    margin: 0 0 22px;
+  }
+
+  /* Wrapper */
+  .cc-{{ section.id }} .carousel {
+    position: relative;
+  }
+
+  /* Scroll track (ALWAYS side-by-side) */
+  .cc-{{ section.id }} .track {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 4px;
+    margin: 0;
+    list-style: none;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide scrollbar (optional) */
+  .cc-{{ section.id }} .track::-webkit-scrollbar { height: 0; }
+  .cc-{{ section.id }} .track { scrollbar-width: none; }
+
+  /* Slide widths per breakpoint */
+  .cc-{{ section.id }} .slide {
+    flex: 0 0 calc((100% - (32px * 3)) / 4); /* 4 items desktop */
+    scroll-snap-align: start;
+  }
+
+  @media (max-width: 1023px) {
+    .cc-{{ section.id }} .slide {
+      flex: 0 0 calc((100% - (32px * 2)) / 3); /* 3 items tablet */
+    }
+  }
+
+  @media (max-width: 767px) {
+    .cc-{{ section.id }} .slide {
+      flex: 0 0 55.5%; /* ~1.8 item visible (peek) */
+    }
+  }
 
   /* Card */
-  .custom-collection-slider .collection-card {
+  .cc-{{ section.id }} .card {
     display: grid;
     justify-items: center;
     text-decoration: none;
     color: inherit;
   }
 
-  .custom-collection-slider .circle {
+  .cc-{{ section.id }} .circle {
     width: 220px;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1 / 1;
     border-radius: 999px;
     overflow: hidden;
     border: 2px solid #dadada;
@@ -77,42 +90,45 @@
     transition: transform .3s ease, box-shadow .3s ease, border .3s ease;
   }
 
-  .custom-collection-slider .circle img {
+  .cc-{{ section.id }} .circle img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 999px;
-    display:block;
+    display: block;
     transition: transform .3s ease;
   }
 
-  .custom-collection-slider .collection-card:hover .circle img { transform: scale(1.06); }
-  .custom-collection-slider .collection-card:hover .circle {
+  .cc-{{ section.id }} .card:hover .circle img { transform: scale(1.06); }
+  .cc-{{ section.id }} .card:hover .circle {
     border: 3px solid #000;
     box-shadow: 0 10px 26px rgba(0,0,0,.14);
   }
 
-  .custom-collection-slider .label {
+  .cc-{{ section.id }} .label {
     margin-top: 14px;
     font-size: 14px;
     text-align: center;
     color: #000;
   }
 
-  /* Arrows */
-  .custom-collection-slider .custom-arrows {
+  /* Responsive circle size */
+  @media (max-width: 1023px) { .cc-{{ section.id }} .circle { width: 180px; } }
+  @media (max-width: 767px)  { .cc-{{ section.id }} .circle { width: 140px; } .cc-{{ section.id }} .label { font-size: 13px; } }
+
+  /* Arrows (always visible desktop/tablet) */
+  .cc-{{ section.id }} .arrows {
     position: absolute;
     top: 50%;
-    left: 0;
-    right: 0;
+    left: 0; right: 0;
     transform: translateY(-50%);
-    z-index: 6;
     display: flex;
     justify-content: space-between;
     pointer-events: none;
+    z-index: 5;
   }
 
-  .custom-collection-slider .custom-arrows button {
+  .cc-{{ section.id }} .btn {
     pointer-events: auto;
     width: 44px;
     height: 44px;
@@ -125,64 +141,50 @@
     cursor: pointer;
   }
 
-  .custom-collection-slider .custom-arrows .prev { margin-left: -24px; }
-  .custom-collection-slider .custom-arrows .next { margin-right: -24px; }
+  .cc-{{ section.id }} .btn.prev { margin-left: -24px; }
+  .cc-{{ section.id }} .btn.next { margin-right: -24px; }
 
-  .custom-collection-slider .custom-arrows button[disabled] {
-    opacity: .35;
-    cursor: not-allowed;
-  }
+  .cc-{{ section.id }} .btn[disabled] { opacity: .35; cursor: not-allowed; }
 
-  .custom-collection-slider .chev {
-    width: 18px; height: 18px;
-    display:block;
-  }
+  .cc-{{ section.id }} .chev { width: 18px; height: 18px; display:block; }
 
-  /* Responsive circle sizing */
-  @media (max-width: 1023px) {
-    .custom-collection-slider .circle { width: 180px; }
-  }
+  /* Optional: hide arrows on mobile (set true/false by CSS) */
   @media (max-width: 767px) {
-    .custom-collection-slider .circle { width: 140px; }
-    .custom-collection-slider .label { font-size: 13px; }
+    .cc-{{ section.id }} .arrows { display: none; }
   }
 </style>
 
-<div class="custom-collection-slider color-{{ section.settings.color_scheme }} gradient">
-  <div class="page-width isolate section-{{ section.id }}-padding">
+<div class="cc-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
     {%- unless section.settings.title == blank -%}
-      <h2 class="section-heading {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+      <h2 class="heading {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
     {%- endunless -%}
 
-    <slider-component>
-      <ul
-        id="Slider-{{ section.id }}"
-        class="collection-track grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down{% if show_slider %} slider{% endif %}{% if show_desktop_slider %} slider--desktop{% endif %}{% if show_mobile_slider %} slider--tablet grid--peek{% endif %}"
-        role="list"
-      >
+    <div class="carousel" data-cc-carousel="{{ section.id }}">
+      <ul class="track" id="Track-{{ section.id }}" role="list">
         {%- for block in section.blocks -%}
           {%- assign c = block.settings.collection -%}
           {%- if c != blank -%}
             {%- assign img = block.settings.custom_image | default: c.featured_image -%}
             {%- assign label = block.settings.custom_label | default: c.title -%}
-            <li class="collection-item grid__item{% if show_slider %} slider__slide{% endif %}" {{ block.shopify_attributes }}>
-              <a class="collection-card" href="{{ c.url }}">
+            <li class="slide" {{ block.shopify_attributes }}>
+              <a class="card" href="{{ c.url }}">
                 <div class="circle">
                   {%- if img != blank -%}
                     <img
-                      src="{{ img | image_url: width: 600 }}"
+                      src="{{ img | image_url: width: 700 }}"
                       alt="{{ label | escape }}"
                       loading="lazy"
-                      width="600"
-                      height="600"
+                      width="700"
+                      height="700"
                     >
                   {%- else -%}
                     <img
                       src="{{ 'collection-apparel-1' | asset_url }}"
                       alt="{{ label | escape }}"
                       loading="lazy"
-                      width="600"
-                      height="600"
+                      width="700"
+                      height="700"
                     >
                   {%- endif -%}
                 </div>
@@ -193,24 +195,59 @@
         {%- endfor -%}
       </ul>
 
-      {%- if show_slider -%}
-        <div class="custom-arrows no-js-hidden">
-          <button class="prev" type="button" name="previous" aria-controls="Slider-{{ section.id }}" aria-label="Previous">
-            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="next" type="button" name="next" aria-controls="Slider-{{ section.id }}" aria-label="Next">
-            <svg class="chev" viewBox="0 0 20 20" aria-hidden="true">
-              <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
-      {%- endif -%}
-    </slider-component>
-
+      <div class="arrows">
+        <button class="btn prev" type="button" aria-controls="Track-{{ section.id }}" aria-label="Previous">
+          <svg class="chev" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="btn next" type="button" aria-controls="Track-{{ section.id }}" aria-label="Next">
+          <svg class="chev" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M7.5 4.5 13 10l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  (function () {
+    const root = document.querySelector('[data-cc-carousel="{{ section.id }}"]');
+    if (!root) return;
+
+    const track = root.querySelector('#Track-{{ section.id }}');
+    const prev = root.querySelector('.btn.prev');
+    const next = root.querySelector('.btn.next');
+
+    function getStep() {
+      const first = track.querySelector('.slide');
+      if (!first) return 0;
+      const slideStyles = getComputedStyle(track);
+      const gap = parseFloat(slideStyles.columnGap || slideStyles.gap || 0) || 0;
+      return first.getBoundingClientRect().width + gap;
+    }
+
+    function updateButtons() {
+      const maxScroll = track.scrollWidth - track.clientWidth - 1;
+      prev.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= maxScroll;
+    }
+
+    function scrollByOne(dir) {
+      const step = getStep();
+      track.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+
+    prev.addEventListener('click', () => scrollByOne(-1));
+    next.addEventListener('click', () => scrollByOne(1));
+    track.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons);
+
+    // init
+    updateButtons();
+  })();
+</script>
 
 {% schema %}
 {
@@ -234,33 +271,7 @@
       "default": "h1",
       "label": "Heading size"
     },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 6,
-      "step": 1,
-      "default": 4,
-      "label": "Visible columns on desktop"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "scheme-1"
-    },
-    { "type": "header", "content": "Mobile Layout" },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "options": [
-        { "value": "1", "label": "1 Column" },
-        { "value": "2", "label": "2 Column" }
-      ],
-      "default": "1",
-      "label": "Columns on mobile"
-    },
-    { "type": "checkbox", "id": "swipe_on_mobile", "default": true, "label": "Enable swipe on mobile" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
     { "type": "header", "content": "Section padding" },
     { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding top", "default": 36 },
     { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Padding bottom", "default": 36 }
