@@ -75,7 +75,7 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "collection": "",
+        "collection": "frontpage",
         "products": [],
         "full_width": true,
         "stack_products": true,
@@ -237,7 +237,7 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "collection": "shop-all",
+        "collection": "frontpage",
         "products": [],
         "full_width": true,
         "stack_products": false,
@@ -246,7 +246,7 @@
         "products_per_row_mobile": "2",
         "products_per_row_desktop": 4,
         "subheading": "",
-        "title": "Featured collection",
+        "title": "All products",
         "content": "",
         "link_url": "",
         "link_text": "View all",
