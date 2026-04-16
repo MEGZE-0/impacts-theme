@@ -15,8 +15,7 @@
         "image_BnmUdy": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Whisk_021bc598142f5ef810649a8d55006e19dr.jpg",
-            "mobile_image": "shopify://shop_images/Whisk_021bc598142f5ef810649a8d55006e19dr.jpg",
+            "image": "shopify://shop_images/black-marble-texture-background.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
@@ -34,16 +33,15 @@
             "background_gradient": ""
           }
         },
-        "slide-2": {
+        "image_TNjWef": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/Whisk_a187ff261e2cbcd97b34f3419c29a5c6dr.jpg",
-            "mobile_image": "shopify://shop_images/Whisk_b3a707e239a784abc1c4ed50b44304f0dr.jpg",
+            "image": "shopify://shop_images/pastel-marble-swirl-background-handmade-feminine-flowing-texture-experimental-art.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
-            "subheading": "",
-            "title": "",
+            "subheading": "Tell your story",
+            "title": "Slide title",
             "heading_tag": "h0",
             "button_text": "",
             "button_link": "",
@@ -59,7 +57,7 @@
       },
       "block_order": [
         "image_BnmUdy",
-        "slide-2"
+        "image_TNjWef"
       ],
       "settings": {
         "full_width": true,
@@ -73,13 +71,39 @@
         "background_gradient": "linear-gradient(60deg, rgba(60, 65, 68, 1), rgba(23, 29, 33, 1) 98%)"
       }
     },
+    "featured_collection_YYzYRH": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "collection": "",
+        "products": [],
+        "full_width": true,
+        "stack_products": true,
+        "show_progress_bar": false,
+        "products_count": 4,
+        "products_per_row_mobile": "2",
+        "products_per_row_desktop": 4,
+        "subheading": "",
+        "title": "New Arrivel",
+        "content": "",
+        "link_url": "",
+        "link_text": "View all",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "product_card_background": "",
+        "product_card_text_color": ""
+      }
+    },
     "collection-list": {
       "type": "collection-list",
       "blocks": {
         "collection-1": {
           "type": "collection",
           "settings": {
-            "collection": "desk-organizers",
+            "collection": "bedsides",
             "subheading": "",
             "title": "Exhaust systems",
             "url": "",
@@ -93,7 +117,7 @@
         "collection-2": {
           "type": "collection",
           "settings": {
-            "collection": "homeware",
+            "collection": "coffe-tables",
             "subheading": "",
             "title": "Air intakes",
             "url": "",
@@ -107,7 +131,7 @@
         "collection_8BMHgj": {
           "type": "collection",
           "settings": {
-            "collection": "kitchenware",
+            "collection": "dinning-tables",
             "subheading": "",
             "title": "Skid plates",
             "url": "",
@@ -121,7 +145,7 @@
         "collection-3": {
           "type": "collection",
           "settings": {
-            "collection": "ramadan",
+            "collection": "plinths-cubby-collection",
             "subheading": "",
             "title": "Body kits",
             "url": "",
@@ -135,9 +159,23 @@
         "collection_9bHcXh": {
           "type": "collection",
           "settings": {
-            "collection": "",
+            "collection": "side-tables",
             "subheading": "Accessories",
             "title": "Accessories",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_Grdy6i": {
+          "type": "collection",
+          "settings": {
+            "collection": "trays",
+            "subheading": "",
+            "title": "",
             "url": "",
             "heading_tag": "h2",
             "text_position": "place-self-center text-center",
@@ -152,7 +190,8 @@
         "collection-2",
         "collection_8BMHgj",
         "collection-3",
-        "collection_9bHcXh"
+        "collection_9bHcXh",
+        "collection_Grdy6i"
       ],
       "settings": {
         "full_width": true,
@@ -169,6 +208,30 @@
         "text_color": "",
         "heading_color": "",
         "heading_gradient": ""
+      }
+    },
+    "before-after-image": {
+      "type": "before-after-image",
+      "settings": {
+        "full_width": true,
+        "subheading": "",
+        "title": "Before/after",
+        "content": "<p>Showcase your product benefit by using before/after image comparison.</p>",
+        "before_image": "shopify://shop_images/ChatGPT_Image_Apr_16_2026_02_00_33_AM.png",
+        "after_image": "shopify://shop_images/WhatsApp_Image_2026-04-13_at_11.41.39_AM.jpg",
+        "expand_image": true,
+        "text_position": "center",
+        "before_after_text_position": "bottom",
+        "before_text": "Before",
+        "after_text": "After",
+        "drag_initial_position": 50,
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "before_text_color": "#ffffff",
+        "after_text_color": "#ffffff",
+        "drag_cursor_background": "#ffffff",
+        "drag_cursor_color": "#000000"
       }
     },
     "featured-collection": {
@@ -196,104 +259,30 @@
         "product_card_text_color": ""
       }
     },
-    "before-after-image": {
-      "type": "before-after-image",
+    "scrolling_text_YVVVRy": {
+      "type": "scrolling-text",
+      "disabled": true,
+      "name": "Scrolling text",
       "settings": {
         "full_width": true,
-        "subheading": "",
-        "title": "Before/after",
-        "content": "<p>Showcase your product benefit by using before/after image comparison.</p>",
-        "before_image": "shopify://shop_images/Whisk_186b7705ebd305a8f8d4e9aec62c758fdr.jpg",
-        "after_image": "shopify://shop_images/Whisk_b3a707e239a784abc1c4ed50b44304f0dr_1620a511-0636-473d-8d31-e29466f79296.jpg",
-        "expand_image": true,
-        "text_position": "center",
-        "before_after_text_position": "bottom",
-        "before_text": "Before",
-        "after_text": "After",
-        "drag_initial_position": 50,
+        "text": "Promotion text",
+        "text_size": "large",
+        "text_style": "fill",
+        "scrolling_mode": "auto",
+        "scrolling_speed": 10,
         "background": "",
         "background_gradient": "",
         "text_color": "",
-        "before_text_color": "#ffffff",
-        "after_text_color": "#ffffff",
-        "drag_cursor_background": "#ffffff",
-        "drag_cursor_color": "#000000"
-      }
-    },
-    "hot-spots": {
-      "type": "hot-spots",
-      "blocks": {
-        "1664424434f5b7d0e0-0": {
-          "type": "item",
-          "settings": {
-            "horizontal_position": 53,
-            "vertical_position": 83,
-            "horizontal_position_mobile": 24,
-            "vertical_position_mobile": 70,
-            "icon_width": 32,
-            "title": "Feature name",
-            "content": "<p>Share useful information about your product features.</p>"
-          }
-        },
-        "1664424434f5b7d0e0-1": {
-          "type": "item",
-          "settings": {
-            "horizontal_position": 41,
-            "vertical_position": 41,
-            "horizontal_position_mobile": 62,
-            "vertical_position_mobile": 14,
-            "icon_width": 32,
-            "title": "Feature name",
-            "content": "<p>Share useful information about your product features.</p>"
-          }
-        },
-        "1664424434f5b7d0e0-2": {
-          "type": "item",
-          "settings": {
-            "horizontal_position": 83,
-            "vertical_position": 75,
-            "horizontal_position_mobile": 83,
-            "vertical_position_mobile": 75,
-            "icon_width": 32,
-            "title": "Feature name",
-            "content": "<p>Share useful information about your product features.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "1664424434f5b7d0e0-0",
-        "1664424434f5b7d0e0-1",
-        "1664424434f5b7d0e0-2"
-      ],
-      "settings": {
-        "full_width": true,
-        "image": "shopify://shop_images/Whisk_021bc598142f5ef810649a8d55006e19dr.jpg",
-        "title": "",
-        "content": "",
-        "button_text": "",
-        "button_url": "",
-        "desktop_text_position": "place-self-start text-start",
-        "image_background": "",
-        "image_background_gradient": "",
-        "overlay_color": "#000000",
-        "overlay_opacity": 0,
-        "overlay_text_color": "#ffffff",
-        "overlay_button_background": "",
-        "overlay_button_text_color": "",
-        "hot_spot_dot_background": "#ffffff",
-        "hot_spot_dot_text_color": "#000000",
-        "hot_spot_content_background": "#ffffff",
-        "hot_spot_content_text_color": "#000000",
-        "hot_spot_content_opacity": 90,
-        "hot_spot_content_blur_radius": 3
+        "text_gradient": ""
       }
     }
   },
   "order": [
     "slideshow",
+    "featured_collection_YYzYRH",
     "collection-list",
-    "featured-collection",
     "before-after-image",
-    "hot-spots"
+    "featured-collection",
+    "scrolling_text_YVVVRy"
   ]
 }
