@@ -15,7 +15,7 @@
         "image_BnmUdy": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/black-marble-texture-background.jpg",
+            "image": "shopify://shop_images/shop-all-car-accessories-tools-banner_jpg.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
@@ -36,7 +36,7 @@
         "image_TNjWef": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/pastel-marble-swirl-background-handmade-feminine-flowing-texture-experimental-art.jpg",
+            "image": "shopify://shop_images/homepage-car-accessories-banner_jpg.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center text-center",
             "desktop_text_position": "sm:place-self-center sm:text-center",
@@ -217,8 +217,6 @@
         "subheading": "",
         "title": "Before/after",
         "content": "<p>Showcase your product benefit by using before/after image comparison.</p>",
-        "before_image": "shopify://shop_images/ChatGPT_Image_Apr_16_2026_02_00_33_AM.png",
-        "after_image": "shopify://shop_images/WhatsApp_Image_2026-04-13_at_11.41.39_AM.jpg",
         "expand_image": true,
         "text_position": "center",
         "before_after_text_position": "bottom",
