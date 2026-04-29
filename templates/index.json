@@ -62,7 +62,7 @@
       "settings": {
         "full_width": true,
         "allow_transparent_header": true,
-        "image_size": "auto",
+        "image_size": "lg",
         "controls_type": "numbers",
         "transition_type": "fade_with_text",
         "autoplay": true,
@@ -75,7 +75,7 @@
       "type": "featured-collection",
       "name": "Featured collection",
       "settings": {
-        "collection": "frontpage",
+        "collection": "shop-all-car-accessories-tools",
         "products": [],
         "full_width": true,
         "stack_products": true,
@@ -103,7 +103,7 @@
         "collection-1": {
           "type": "collection",
           "settings": {
-            "collection": "bedsides",
+            "collection": "best-selling-car-accessories-emergency-tools",
             "subheading": "",
             "title": "Exhaust systems",
             "url": "",
@@ -117,7 +117,7 @@
         "collection-2": {
           "type": "collection",
           "settings": {
-            "collection": "coffe-tables",
+            "collection": "car-cleaning-detailing-maintenance",
             "subheading": "",
             "title": "Air intakes",
             "url": "",
@@ -131,7 +131,7 @@
         "collection_8BMHgj": {
           "type": "collection",
           "settings": {
-            "collection": "dinning-tables",
+            "collection": "car-exterior-accessories-trim",
             "subheading": "",
             "title": "Skid plates",
             "url": "",
@@ -145,7 +145,7 @@
         "collection-3": {
           "type": "collection",
           "settings": {
-            "collection": "plinths-cubby-collection",
+            "collection": "diagnostic-tools",
             "subheading": "",
             "title": "Body kits",
             "url": "",
@@ -159,7 +159,7 @@
         "collection_9bHcXh": {
           "type": "collection",
           "settings": {
-            "collection": "side-tables",
+            "collection": "diagnostic-tools",
             "subheading": "Accessories",
             "title": "Accessories",
             "url": "",
@@ -173,7 +173,21 @@
         "collection_Grdy6i": {
           "type": "collection",
           "settings": {
-            "collection": "trays",
+            "collection": "pet-car-travel-accessories",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
+        "collection_DxTbHw": {
+          "type": "collection",
+          "settings": {
+            "collection": "roadside-emergency-tools",
             "subheading": "",
             "title": "",
             "url": "",
@@ -191,15 +205,16 @@
         "collection_8BMHgj",
         "collection-3",
         "collection_9bHcXh",
-        "collection_Grdy6i"
+        "collection_Grdy6i",
+        "collection_DxTbHw"
       ],
       "settings": {
         "full_width": true,
         "stack_collections": false,
         "collections_per_row": 4,
         "show_progress_bar": false,
-        "subheading": "",
-        "title": "Collection list",
+        "subheading": "access ories",
+        "title": "roadside emergancy tool",
         "content": "",
         "link_url": "",
         "link_text": "View all",
@@ -212,6 +227,7 @@
     },
     "before-after-image": {
       "type": "before-after-image",
+      "disabled": true,
       "settings": {
         "full_width": true,
         "subheading": "",
