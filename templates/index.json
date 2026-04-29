@@ -156,6 +156,20 @@
             "overlay_opacity": 30
           }
         },
+        "collection_DxTbHw": {
+          "type": "collection",
+          "settings": {
+            "collection": "roadside-emergency-tools",
+            "subheading": "",
+            "title": "",
+            "url": "",
+            "heading_tag": "h2",
+            "text_position": "place-self-center text-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30
+          }
+        },
         "collection_9bHcXh": {
           "type": "collection",
           "settings": {
@@ -183,20 +197,6 @@
             "overlay_color": "#000000",
             "overlay_opacity": 30
           }
-        },
-        "collection_DxTbHw": {
-          "type": "collection",
-          "settings": {
-            "collection": "roadside-emergency-tools",
-            "subheading": "",
-            "title": "",
-            "url": "",
-            "heading_tag": "h2",
-            "text_position": "place-self-center text-center",
-            "text_color": "#ffffff",
-            "overlay_color": "#000000",
-            "overlay_opacity": 30
-          }
         }
       },
       "block_order": [
@@ -204,9 +204,9 @@
         "collection-2",
         "collection_8BMHgj",
         "collection-3",
+        "collection_DxTbHw",
         "collection_9bHcXh",
-        "collection_Grdy6i",
-        "collection_DxTbHw"
+        "collection_Grdy6i"
       ],
       "settings": {
         "full_width": true,
@@ -248,10 +248,42 @@
         "drag_cursor_color": "#000000"
       }
     },
+    "video_t9WiTX": {
+      "type": "video",
+      "blocks": {
+        "play_M67eUe": {
+          "type": "play",
+          "settings": {}
+        },
+        "heading_FKEADn": {
+          "type": "heading",
+          "disabled": true,
+          "settings": {
+            "text": "Video",
+            "heading_tag": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "play_M67eUe",
+        "heading_FKEADn"
+      ],
+      "name": "Video",
+      "settings": {
+        "full_width": true,
+        "allow_transparent_header": false,
+        "autoplay": true,
+        "video_size": "auto",
+        "external_video_url": "https://youtu.be/t9-cMiEDNyk?si=2zkeoSLkt7WTQ06a",
+        "text_color": "#ffffff",
+        "overlay_color": "#000000",
+        "overlay_opacity": 15
+      }
+    },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "collection": "frontpage",
+        "collection": "shop-all-car-accessories-tools",
         "products": [],
         "full_width": true,
         "stack_products": false,
@@ -289,6 +321,58 @@
         "text_color": "",
         "text_gradient": ""
       }
+    },
+    "press_jzWUkd": {
+      "type": "press",
+      "blocks": {
+        "quote_qgCipT": {
+          "type": "quote",
+          "settings": {
+            "logo_width": 100,
+            "author": "",
+            "content": "Write some content about what they says about your store.",
+            "show_rating": true,
+            "rating": 4
+          }
+        },
+        "quote_reXQmb": {
+          "type": "quote",
+          "settings": {
+            "logo_width": 100,
+            "author": "",
+            "content": "Write some content about what they says about your store.",
+            "show_rating": true,
+            "rating": 4
+          }
+        },
+        "quote_xpWcWP": {
+          "type": "quote",
+          "settings": {
+            "logo_width": 100,
+            "author": "",
+            "content": "Write some content about what they says about your store.",
+            "show_rating": true,
+            "rating": 4
+          }
+        }
+      },
+      "block_order": [
+        "quote_qgCipT",
+        "quote_reXQmb",
+        "quote_xpWcWP"
+      ],
+      "name": "Press",
+      "settings": {
+        "full_width": true,
+        "content_size": "medium",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "logo_item_background": "",
+        "logo_item_border": ""
+      }
     }
   },
   "order": [
@@ -296,7 +380,9 @@
     "featured_collection_YYzYRH",
     "collection-list",
     "before-after-image",
+    "video_t9WiTX",
     "featured-collection",
-    "scrolling_text_YVVVRy"
+    "scrolling_text_YVVVRy",
+    "press_jzWUkd"
   ]
 }
