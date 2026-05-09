@@ -38,6 +38,8 @@
     "product_color_display": "swatch",
     "product_image_aspect_ratio": "square",
     "product_info_alignment": "start",
+    "social_facebook": "https://www.facebook.com/share/1S3FWzvnrb/",
+    "social_instagram": "https://www.instagram.com/autoproblemsolver.store?igsh=b2hxcmIwMmVsejl4",
     "checkout_accent_color": "#f0c417",
     "checkout_button_color": "#1a1a1a",
     "content_for_index": [],
