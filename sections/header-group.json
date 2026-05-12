@@ -17,7 +17,7 @@
         "message": {
           "type": "message",
           "settings": {
-            "text": "Announce something here",
+            "text": "Free shipping   USA",
             "url": ""
           }
         }
@@ -27,11 +27,11 @@
       ],
       "settings": {
         "enable_sticky": false,
-        "text_size": "text-xs",
+        "text_size": "text-lg",
         "navigation_mode": "scrolling",
-        "scrolling_speed": 10,
-        "background": "#1a1a1a",
-        "background_gradient": "",
+        "scrolling_speed": 15,
+        "background": "#000000",
+        "background_gradient": "radial-gradient(rgba(0, 0, 0, 1) 100%, rgba(221, 39, 57, 1) 100%)",
         "text_color": "#ffffff"
       }
     },
